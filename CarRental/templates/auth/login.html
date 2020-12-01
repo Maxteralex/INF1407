@@ -8,45 +8,17 @@
     <hr class="my-4">
     <form method="POST">
         {% csrf_token %}
-        <table>
-            <thead>
-                <tr>
-                    <td class='w-25'></td>
-                    <td class='w-50'></td>
-                </tr>
-            </thead>
-            {% for field in form %}
-                <tr valign="top">
-                    <td>
-                        {{ field.label_tag }}
-                        {% if field.help_text %}
-                            <span><i class="fa fa-question-circle" data-toggle="tooltip" data-placement="top" title="{% for text in field.help_text.splitlines %} {{text}} {% endfor %}" aria-hidden="true"></i></span>
-                        {% endif %}
-                    </td>
-                    <td>
-                        {{ field }}
-                    </td>
-                </tr>
-                {% if field.errors %}
-                    <tr>
-                        <td colspan="2">
-                            <div class="alert alert-danger alert-dismissable" role="alert">
-                                <button type="button" class="close" data-dismiss="alert" aria-label="X">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                                {% for error in field.errors %}
-                                    {{ error }}<br/>
-                                {% endfor %}
-                            </div>
-                        </td>
-                    </tr>
-                {% endif %}
-                <tr><td colspan="2">&nbsp;</td></tr>
-            {% endfor %}
-        </table>
+        {% include 'form_pattern.html' %}
+        <div class="row">
+            <div class="col-lg-6 offset-lg-3">
+                <a href="{% url 'password_reset' %}">Esqueceu sua senha?</a>
+            </div>
+        </div> 
         <br/>
-        <div class="row justify-content-lg-center">
-            <input class="btn btn-success" type="submit" value='Efetuar Login'>
+        <div class="row">
+            <div class="col-lg-6 offset-lg-3">
+                <input class="btn btn-success" type="submit" value='Efetuar Login'>
+            </div>
         </div>
     </form>
 {% endblock %}
