@@ -1,5 +1,8 @@
 from django.contrib.auth.models import User
-from django.shortcuts import render, redirect
+from django.contrib.auth import views
+from django.contrib.messages.views import SuccessMessageMixin
+from django.contrib import messages
+from django.shortcuts import render, redirect, reverse
 from django.views.generic.base import View
 from CarRental.auth.forms import CreateUserForm
 
@@ -32,3 +35,16 @@ class RegisterView(View):
             'form': form
         }
         return render(request, 'auth/register.html', context)
+
+class UserLoginView(SuccessMessageMixin, views.LoginView):
+    def get_success_url(self):
+        return reverse('home')
+
+    def get_success_message(self, cleaned_data):
+        return 'Bem-vindo ao Car Rental, {}!'.format(self.request.user.first_name if self.request.user.first_name else self.request.user)
+
+class UserLogoutView(views.LogoutView):
+    def dispatch(self, request, *args, **kwargs):
+        response = super().dispatch(request, *args, **kwargs)
+        messages.add_message(request, messages.SUCCESS, 'Você efetuou logout. Volte sempre!')
+        return response

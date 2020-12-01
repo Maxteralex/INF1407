@@ -16,10 +16,11 @@ Including another URLconf
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, include, reverse_lazy
 
 from CarRental import views
 from CarRental.auth import views as auth_views
+from CarRental.auth.forms import UserLoginForm
 
 
 admin.site.site_title = 'Car Rental'
@@ -30,7 +31,8 @@ urlpatterns = [
     path('', views.homepage, name='home'),
     path('about/', views.about, name='about'),
     path('accounts/register/', auth_views.RegisterView.as_view(), name='register'),
-        
+    path('accounts/login/', auth_views.UserLoginView.as_view(template_name='auth/login.html', redirect_authenticated_user=True, authentication_form=UserLoginForm), name='login'),
+    path('accounts/logout/', auth_views.UserLogoutView.as_view(next_page=reverse_lazy('home')), name='logout'),
 ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
