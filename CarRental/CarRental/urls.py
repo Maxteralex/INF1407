@@ -32,6 +32,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.homepage, name='home'),
     path('about/', views.about, name='about'),
+    path('rental/', include('rental.urls')),
     path('accounts/register/', auth_views.RegisterView.as_view(), name='register'),
     path('accounts/login/', auth_views.UserLoginView.as_view(
         template_name='auth/login.html',
