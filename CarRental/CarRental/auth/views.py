@@ -43,6 +43,12 @@ class RegisterView(View):
 
 
 class UserLoginView(SuccessMessageMixin, views.LoginView):
+    def post(self, request, *args, **kwargs):
+        response = super().post(request)
+        if response.status_code != 302:
+            messages.add_message(self.request, messages.ERROR, 'Nome de usuário ou senha inválidos!')
+        return response
+
     def get_success_url(self):
         return reverse('home')
 
