@@ -1,0 +1,25 @@
+html, body {
+	background-color:lightsteelblue !important;
+}
+
+.main-container {
+	background-color: lightblue;
+	margin-top: 5vh;
+	padding-top: 2vh;
+}
+
+.main-row {
+	padding-bottom: 1vh;
+}
+
+.main-content {
+	overflow: auto;
+	height: calc(92vh);
+}
+
+@media (max-width: 992px) {
+	.main-content {
+		overflow: auto;
+		height: calc(96vh);
+	}
+}
