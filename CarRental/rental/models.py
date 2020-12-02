@@ -1,8 +1,7 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser
 
-class Cliente(models.Model):
-    usuario = models.OneToOneField(User, primary_key=True, on_delete=models.CASCADE)
+class User(AbstractUser):
     telefone = models.CharField(max_length=11, blank=True, null=True)
     cpf = models.CharField(max_length=11)
     credito = models.FloatField(default=0)
@@ -11,8 +10,6 @@ class Cliente(models.Model):
 class Funcionario(models.Model):
     usuario = models.OneToOneField(User, primary_key=True, on_delete=models.CASCADE)
     salario = models.FloatField()
-    cpf = models.CharField(max_length=11)
-    telefone = models.CharField(max_length=11, blank=True, null=True)
     # horas contratadas por semana
     hh_semana = models.IntegerField()
 
@@ -28,9 +25,18 @@ class Carro(models.Model):
     # carro ativo é disponibilizado para alugueis, inativos não
     ativo = models.BooleanField(default=True)
 
+    class Meta:
+        permissions = (
+            ("criar_carros", "Pode criar novos carros"),
+            ("editar_carros", "Pode atualizar dados de carros"),
+            ("deletar_carros", "Pode remover carros ainda não alugados"),
+            ("ver_tudo_carros", "Permite ver todas as informações de todos os carros"),
+            ("switch_ativo_carros", "Permite ativar ou desativar carros"),
+        )
+
 
 class Aluguel(models.Model):
-    cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE)
+    cliente = models.ForeignKey(User, on_delete=models.CASCADE)
     funcionario = models.ForeignKey(Funcionario, on_delete=models.CASCADE)
     carro = models.ForeignKey(Carro, on_delete=models.CASCADE)
     data_ini = models.DateTimeField()
@@ -45,7 +51,7 @@ class Aluguel(models.Model):
 
 
 class Solicita(models.Model):
-    cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE)
+    cliente = models.ForeignKey(User, on_delete=models.CASCADE)
     valor = models.FloatField()
     data_solicitacao = models.DateTimeField()
     # funcionário que avalia a solicitação

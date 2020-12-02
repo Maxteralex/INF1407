@@ -1,4 +1,3 @@
-from django.contrib.auth.models import User
 from django.contrib.auth import views
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib import messages
@@ -9,6 +8,7 @@ from django.views.generic.base import View
 from django.shortcuts import render, redirect, reverse
 from CarRental.auth.forms import CreateUserForm
 from CarRental.settings import EMAIL_HOST_USER as email
+from rental.models import User
 
 
 class RegisterView(View):
@@ -32,8 +32,11 @@ class RegisterView(View):
                 email=form.cleaned_data['email'],
                 first_name=form.cleaned_data['first_name'],
                 last_name=form.cleaned_data['last_name'],
+                cpf=form.cleaned_data['cpf'],
+                telefone=form.cleaned_data['telefone']
             )
             user.save()
+            messages.add_message(request, messages.SUCCESS, 'Criação de usuário realizada com sucesso!')
             return redirect('home')
 
         context = {
