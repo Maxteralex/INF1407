@@ -3,7 +3,7 @@ from django.contrib.auth.models import AbstractUser
 
 class User(AbstractUser):
     telefone = models.CharField(max_length=11, blank=True, null=True)
-    cpf = models.CharField(max_length=11)
+    cpf = models.CharField(max_length=11, unique=True)
     credito = models.FloatField(default=0)
 
 

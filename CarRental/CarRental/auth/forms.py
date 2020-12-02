@@ -12,8 +12,8 @@ class CreateUserForm(forms.Form):
     first_name = forms.CharField(label='Nome*', max_length=150, widget=forms.TextInput(attrs={'class': 'form-control'}))
     last_name = forms.CharField(label='Sobrenome*', max_length=150, widget=forms.TextInput(attrs={'class': 'form-control'}))
     email = forms.EmailField(label='Email*', max_length=254, widget=forms.EmailInput(attrs={'class': 'form-control'}))
-    cpf = forms.CharField(label='CPF*', min_length=11, max_length=11, widget=forms.TextInput(attrs={'class': 'form-control'}), validators=[RegexValidator(regex=r'^[0-9]{11}$', message='O CPF deve conter 11 caracteres numéricos.')], help_text="Apenas os números do CPF.")
-    telefone = forms.CharField(label='Telefone', required=False, max_length=12, min_length=8, widget=forms.TextInput(attrs={'class': 'form-control'}), help_text="Deve ser composto apenas por números (espaços apenas ilustrativos): DDD NNNNN NNNN")
+    cpf = forms.CharField(label='CPF*', min_length=11, max_length=11, widget=forms.TextInput(attrs={'class': 'form-control'}), validators=[RegexValidator(regex=r'^\d{11}$', message='O CPF deve conter 11 caracteres numéricos.')], help_text="Apenas os números do CPF.")
+    telefone = forms.CharField(label='Telefone', required=False, max_length=12, min_length=8, validators=[RegexValidator(regex=r'^(\d{8,12})?$', message='Todos os caracteres devem ser numéricos.')], widget=forms.TextInput(attrs={'class': 'form-control'}), help_text="Deve ser composto apenas por números (espaços apenas ilustrativos): DDD NNNNN NNNN")
 
     def clean_username(self):
         username = self.cleaned_data.get('username')
@@ -35,6 +35,9 @@ class CreateUserForm(forms.Form):
     
     def clean_cpf(self):
         cpf = self.cleaned_data.get('cpf')
+        # Testa por CPF duplicado
+        if User.objects.filter(cpf=cpf).all():
+            raise ValidationError('Já há um usuário com esse CPF.')
         # Verifica CPFs inválidos com todos os dígitos repetidos (ex.: 00000000000)
         for i in range(10):
             temp = ''.join(str(i) for j in range(11))
