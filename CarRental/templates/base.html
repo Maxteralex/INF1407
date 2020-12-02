@@ -30,6 +30,11 @@
 					<li class="nav-item">
 						<a class="nav-link" href="{% url 'about' %}">Sobre</a>
 					</li>
+					{% if user.is_authenticated %}
+						<li>
+							<a class="nav-link" href="{% url 'listar_carros' %}">Gerenciar Carros</a>
+						</li>
+					{% endif %}
 				</ul>
 				{% if user.is_authenticated %}
 					<ul class="navbar-nav mr-sm-2">
