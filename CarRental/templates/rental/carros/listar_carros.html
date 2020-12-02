@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+
+{% block title %}Listar Carros{% endblock %}
+{% block head %}
+    <script>
+        $(document).ready(function() {
+            $('.cr-table').DataTable({
+                // configurações das mensagens da tabela
+                "language": { 
+                    "lengthMenu": "Mostrar _MENU_ carros por página",
+                    "zeroRecords": "Nada com esse filtro - desculpe",
+                    "info": "Mostrando _PAGE_ de _PAGES_",
+                    "infoEmpty": "Não há carros com esse filtro",
+                    "infoFiltered": "(filtrado de um total de _MAX_ buscas)",
+                    "paginate": {
+                        "first": "Primeiro",
+                        "last": "Último",
+                        "next": "Próximo",
+                        "previous": "Anterior",
+                    },
+                    "loadingRecords": "Carregando...",
+                    "search": "Filtrar:",
+                    "aria": {
+                        "sortAscending": ": Ative para ordenar a coluna de forma ascendente",
+                        "sortDescending": ": Ative para odenar a coluna de forma descendente"
+                    }
+                },
+                "ordering": true,
+                "responsive": true
+            });
+        });
+    </script>
+{% endblock %}
+{% block content %}
+    <h1>Lista de Carros</h1>
+    <br/>
+    <a href="{% url 'add_carro' %}" class="btn btn-success">Adicionar novo carro</a>
+    <br/><br/>
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover cr-table" >
+            <thead>
+                <tr class="table-primary">
+                    <th class="w-15"> Marca </th>
+                    <th class="w-15"> Modelo </th>
+                    <th class="w-5"> Preço base </th>
+                    <th class="w-5"> Condição </th>
+                    <th class="w-5"> Está ativo? </th>
+                    <th class="w-55"> Ações </th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for carro in carros %}
+                    <tr>
+                        <td> {{ carro.marca }} </td>
+                        <td> {{ carro.modelo }} </td>
+                        <td> {{ carro.preco_base|floatformat:2 }} </td>
+                        <td> {{ carro.get_condicao_display }} </td>
+                        <td> {% if carro.ativo %} Sim {% else %} Não {% endif %} </td>
+                        <td>
+                            <a href="{% url 'editar_carro' pk=carro.id %}" class="btn btn-primary">Editar Carro</a>
+                            <a href="{% url 'switch_ativo_carro' pk=carro.id %}" class="btn btn-warning">{% if carro.ativo %} Desativar {% else %} Ativar {% endif %} Carro</a>
+                            <a href="{% url 'del_carro' pk=carro.id %}" class="btn btn-danger">Apagar Carro</a>
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="6">Não há carros disponíveis.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

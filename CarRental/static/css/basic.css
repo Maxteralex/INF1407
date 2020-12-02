@@ -23,3 +23,11 @@ html, body {
 		height: calc(96vh);
 	}
 }
+
+.cr-table {
+	text-align: center;
+}
+
+.cr-table thead tr th {
+	vertical-align: middle;
+}
