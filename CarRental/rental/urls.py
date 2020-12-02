@@ -1,5 +1,5 @@
 from django.urls import path
-from rental.views import views_carros, views_solicitacoes
+from rental.views import views_carros, views_solicitacoes, views_funcionarios
 
 urlpatterns = [
     path('carros/', views_carros.ListaCarros.as_view(), name="listar_carros"),
@@ -10,8 +10,9 @@ urlpatterns = [
     path('credito/', views_solicitacoes.ListaMinhasSolicitacoes.as_view(), name="minhas_solicitacoes"),
     path('credito/gerencia_solicitacoes/', views_solicitacoes.ListaSolicitacoes.as_view(), name="gerencia_solicitacoes"),
     path('credito/cria_solicitacao/', views_solicitacoes.CriaSolicitacao.as_view(), name="criar_solicitacao"),
-    path('credito/switch_status_solicitacao/<int:pk>/<str:status>/', views_solicitacoes.MudaStatusSolicitacao.as_view(), name="switch_status_solicitacao")
-    #path('funcionarios/', views_funcionarios.ListaUsuarios.as_view(), name="lista_usuarios")
-    #path('alugar/', views_aluguel.ListaAlugueis, name="listar_alugueis"),
-    
+    path('credito/switch_status_solicitacao/<int:pk>/<str:status>/', views_solicitacoes.MudaStatusSolicitacao.as_view(), name="switch_status_solicitacao"),
+    path('funcionarios/', views_funcionarios.ListaClientesFuncionarios.as_view(), name="gerencia_clientes_funcionarios"),
+    path('funcionarios/contratar/<int:pk>/', views_funcionarios.AddNovoFuncionario.as_view(), name="contratar_funcionario"),
+    path('funcionarios/demitir/<int:pk>/', views_funcionarios.RemoveFuncionario.as_view(), name="demitir_funcionario"),
+    #path('alugar/', views_aluguel.ListaAlugueis, name="listar_alugueis"),   
 ]

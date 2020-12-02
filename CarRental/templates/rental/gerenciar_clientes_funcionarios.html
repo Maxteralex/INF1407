@@ -1,0 +1,117 @@
+{% extends 'base.html' %}
+
+{% block title %}Gerenciar Clientes e Funcionários{% endblock %}
+{% block head %}
+    <script>
+        onload = function() {
+            $('#modal-contrata').on('show.bs.modal', function(e) {
+                $(this).find('#form-contrata').attr('action', $(e.relatedTarget).data('href'));
+                $(this).find('#nome_funcionario').text($(e.relatedTarget).data('nome'));
+            });
+
+            $('.cr-table').DataTable({
+                "language": { 
+                    "lengthMenu": "Mostrar _MENU_ usuários por página",
+                    "zeroRecords": "Nada com esse filtro - desculpe",
+                    "info": "Mostrando _PAGE_ de _PAGES_",
+                    "infoEmpty": "Não há usuários com esse filtro",
+                    "infoFiltered": "(filtrado de um total de _MAX_ buscas)",
+                    "paginate": {
+                        "first": "Primeiro",
+                        "last": "Último",
+                        "next": "Próximo",
+                        "previous": "Anterior",
+                    },
+                    "loadingRecords": "Carregando...",
+                    "search": "Filtrar:",
+                    "aria": {
+                        "sortAscending": ": Ative para ordenar a coluna de forma ascendente",
+                        "sortDescending": ": Ative para ordenar a coluna de forma descendente"
+                    }
+                },
+                "ordering": true,
+                "responsive": true
+            });
+        }
+    </script>
+{% endblock %}
+{% block content %}
+    {% include 'rental/contratar_funcionario_modal.html' %}
+    <h1>Lista de Clientes</h1>
+    <br/>
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover cr-table" >
+            <thead>
+                <tr class="table-primary">
+                    <th class="w-15"> Username </th>
+                    <th class="w-15"> Primeiro Nome </th>
+                    <th class="w-5"> Último Nome </th>
+                    <th class="w-5"> CPF </th>
+                    <th class="w-5"> E-mail </th>
+                    <th class="w-5"> Telefone </th>
+                    <th class="w-50"> Ações </th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for cliente in clientes %}
+                    <tr>
+                        <td> {{ cliente.username }} </td>
+                        <td> {{ cliente.first_name }} </td>
+                        <td> {{ cliente.last_name }} </td>
+                        <td> {{ cliente.cpf }} </td>
+                        <td> {{ cliente.email }} </td>
+                        <td> {{ cliente.telefone }} </td>
+                        <td>
+                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-contrata" data-href="{% url 'contratar_funcionario' pk=cliente.id %}" data-nome="{{ cliente.first_name }} {{ cliente.last_name }}">Tornar Funcionário</button>
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="7">Ainda não há clientes.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <br/>
+    <h1>Lista de Funcionários</h1>
+    <br/>
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover cr-table" >
+            <thead>
+                <tr class="table-primary">
+                    <th class="w-15"> Username </th>
+                    <th class="w-15"> Primeiro Nome </th>
+                    <th class="w-5"> Último Nome </th>
+                    <th class="w-5"> CPF </th>
+                    <th class="w-5"> E-mail </th>
+                    <th class="w-5"> Telefone </th>
+                    <th class="w-5"> Salário </th>
+                    <th class="w-5"> Horas de Trabalho Semanais </th>
+                    <th class="w-50"> Ações </th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for funcionario in funcionarios %}
+                    <tr>
+                        <td> {{ funcionario.usuario.username }} </td>
+                        <td> {{ funcionario.usuario.first_name }} </td>
+                        <td> {{ funcionario.usuario.last_name }} </td>
+                        <td> {{ funcionario.usuario.cpf }} </td>
+                        <td> {{ funcionario.usuario.email }} </td>
+                        <td> {{ funcionario.usuario.telefone }} </td>
+                        <td> {{ funcionario.salario }} </td>
+                        <td> {{ funcionario.horas_semana }} </td>
+                        <td>
+                            <a href="{% url 'demitir_funcionario' pk=funcionario.usuario.id %}" class="btn btn-danger">Demitir Funcionário</a>
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="9">Ainda não há funcionários.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
