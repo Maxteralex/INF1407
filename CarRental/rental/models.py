@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from datetime import datetime
 
 class User(AbstractUser):
     telefone = models.CharField(max_length=11, blank=True, null=True)
@@ -11,7 +12,7 @@ class Funcionario(models.Model):
     usuario = models.OneToOneField(User, primary_key=True, on_delete=models.CASCADE)
     salario = models.FloatField()
     # horas contratadas por semana
-    hh_semana = models.IntegerField()
+    horas_semana = models.IntegerField()
 
 
 class Carro(models.Model):
@@ -27,20 +28,19 @@ class Carro(models.Model):
 
     class Meta:
         permissions = (
-            ("criar_carros", "Pode criar novos carros"),
-            ("editar_carros", "Pode atualizar dados de carros"),
-            ("deletar_carros", "Pode remover carros ainda não alugados"),
-            ("ver_tudo_carros", "Permite ver todas as informações de todos os carros"),
-            ("switch_ativo_carros", "Permite ativar ou desativar carros"),
+            ("gerenciar_carros", "Pode criar, ver todos, atualizar, remover e ativar/desativar carros"),
         )
 
 
 class Aluguel(models.Model):
     cliente = models.ForeignKey(User, on_delete=models.CASCADE)
-    funcionario = models.ForeignKey(Funcionario, on_delete=models.CASCADE)
+    funcionario = models.ForeignKey(Funcionario, blank=True, null=True, on_delete=models.CASCADE)
     carro = models.ForeignKey(Carro, on_delete=models.CASCADE)
     data_ini = models.DateTimeField()
     data_fim = models.DateTimeField()
+    # só é mudado após avaliação do funcionário
+    status = models.BooleanField(blank=True, null=True)
+    data_avaliacao = models.DateTimeField(blank=True, null=True)
     # data de devolução considera que pode ser devolvido adiantado ou atrasado
     data_devolucao = models.DateTimeField(blank=True, null=True)
     preco_aluguel = models.FloatField()
@@ -53,9 +53,8 @@ class Aluguel(models.Model):
 class Solicita(models.Model):
     cliente = models.ForeignKey(User, on_delete=models.CASCADE)
     valor = models.FloatField()
-    data_solicitacao = models.DateTimeField()
-    # funcionário que avalia a solicitação
+    data_solicitacao = models.DateTimeField(default=datetime.now)
+    # só é mudado após avaliação de um funcionário
     funcionario = models.ForeignKey(Funcionario, blank=True, null=True, on_delete=models.CASCADE)
-    # só é mudado após avaliação do funcionário
     status = models.BooleanField(blank=True, null=True)
     data_avaliacao = models.DateTimeField(blank=True, null=True)

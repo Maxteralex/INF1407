@@ -18,3 +18,7 @@ class AddEditCarroForm(forms.ModelForm):
             'condicao': forms.Select(attrs={'class': 'form-control'}),
         }
 
+
+class CriaSolicitacaoForm(forms.Form):
+    valor = forms.FloatField(label="Valor Solicitado", widget=forms.NumberInput(attrs={'class': 'form-control'}))
+

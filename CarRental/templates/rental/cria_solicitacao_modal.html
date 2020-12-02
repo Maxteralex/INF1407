@@ -1,0 +1,27 @@
+<div class="modal fade" id="modal-cria" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color:rgb(55, 72, 231); color:white;">
+                <h4 class="modal-title text-center">Criação de Solicitação</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <form method="POST" action="{% url 'criar_solicitacao' %}">
+                <div class="modal-body">
+                    {% csrf_token %}
+                    {% for field in form %}
+                        <div class="row justify-content-center">
+                            <div class="form-group col-md-8">
+                                {{ field.label_tag }}
+                                {{ field }}
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+                <div class="modal-footer flex-nowrap">
+                    <input type="submit" name="submit" value="Criar Solicitação" class="btn btn-success btn-block ml-1"/>
+                    <button type="button" class="btn btn-danger btn-block ml-1" data-dismiss="modal">Voltar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

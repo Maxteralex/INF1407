@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+
+{% block title %}Listar {% if private %} Minhas {% endif %} Solicitações{% endblock %}
+{% block head %}
+    <script>
+        $(document).ready(function() {
+            $('.cr-table').DataTable({
+                "language": { 
+                    "lengthMenu": "Mostrar _MENU_ solicitações por página",
+                    "zeroRecords": "Nada com esse filtro - desculpe",
+                    "info": "Mostrando _PAGE_ de _PAGES_",
+                    "infoEmpty": "Não há solicitações com esse filtro",
+                    "infoFiltered": "(filtrado de um total de _MAX_ buscas)",
+                    "paginate": {
+                        "first": "Primeiro",
+                        "last": "Último",
+                        "next": "Próximo",
+                        "previous": "Anterior",
+                    },
+                    "loadingRecords": "Carregando...",
+                    "search": "Filtrar:",
+                    "aria": {
+                        "sortAscending": ": Ative para ordenar a coluna de forma ascendente",
+                        "sortDescending": ": Ative para ordenar a coluna de forma descendente"
+                    }
+                },
+                "ordering": true,
+                "responsive": true
+            });
+        });
+    </script>
+{% endblock %}
+{% block content %}
+    <h1>{% if private %}Minhas{% else %}Lista de{% endif %} Solicitações</h1>
+    <br/>
+    {% if private %}
+        <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modal-cria">Fazer nova solicitação</button>
+        {% include 'rental/cria_solicitacao_modal.html' %}
+        <br/><br/>
+    {% endif %}
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover cr-table" >
+            <thead>
+                <tr class="table-primary">
+                    {% if not private %}
+                        <th class="w-15"> Cliente </th>
+                    {% endif %}
+                    <th class="w-15"> Valor Solicitado </th>
+                    <th class="w-5"> Data de Solicitação </th>
+                    <th class="w-5"> Status </th>
+                    {% if not private %}
+                        <th class="w-10">Funcionário Responsável</th>
+                        <th class="w-5">Data de Avaliação</th>
+                        <th class="w-45"> Ações </th>
+                    {% endif %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for solicitacao in solicitacoes %}
+                    <tr>
+                        {% if not private %}
+                            <td> {{ solicitacao.cliente.username }} </td>
+                        {% endif %}
+                        <td> {{ solicitacao.valor|floatformat:2 }} </td>
+                        <td> {{ solicitacao.data_solicitacao }} </td>
+                        <td> {% if solicitacao.status == None %} Não Avaliado {% elif solicitacao.status == True %} Aceita {% else %} Rejeitada {% endif %} </td>
+                        {% if not private %}
+                            <td> {% if solicitacao.status == None %} - {% else %} {{ solicitacao.funcionario }} {% endif %} </td>
+                            <td> {% if solicitacao.status == None %} - {% else %} {{ solicitacao.data_avaliacao }} {% endif %} </td>
+                            <td>
+                                {% if solicitacao.status == None %}
+                                    <a href="{% url 'switch_status_solicitacao' pk=solicitacao.id status='aceita' %}" class="btn btn-success">Aceitar</a>
+                                    <a href="{% url 'switch_status_solicitacao' pk=solicitacao.id status='rejeita' %}" class="btn btn-danger" style="margin-top: 1%;">Rejeitar</a>
+                                {% endif %}
+                            </td>
+                        {% endif %}
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="7">Ainda não há solicitações.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
