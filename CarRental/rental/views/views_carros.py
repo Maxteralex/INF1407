@@ -9,13 +9,13 @@ class ListaCarros(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         carros = Carro.objects.all()
         context = {'carros': carros}
-        return render(request, 'rental/carros/listar_carros.html', context)
+        return render(request, 'rental/listar_carros.html', context)
 
 
 class AddCarro(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         context = {'form': AddEditCarroForm, 'addedit': 'Adicionar'}
-        return render(request, 'rental/carros/addedit_carro.html', context)
+        return render(request, 'rental/addedit_carro.html', context)
 
     def post(self, request, *args, **kwargs):
         form = AddEditCarroForm(request.POST)
@@ -24,7 +24,7 @@ class AddCarro(LoginRequiredMixin, View):
             carro.save()
             return redirect('listar_carros')
         context = {'form': form, 'addedit': 'Adicionar'}
-        return render(request, 'rental/carros/addedit_carro.html', context)
+        return render(request, 'rental/addedit_carro.html', context)
 
 
 class EditCarro(LoginRequiredMixin, View):
@@ -32,7 +32,7 @@ class EditCarro(LoginRequiredMixin, View):
         carro = get_object_or_404(Carro, pk=pk)
         form = AddEditCarroForm(instance=carro)
         context = {'form': form, 'addedit': 'Editar'}
-        return render(request, 'rental/carros/addedit_carro.html', context)
+        return render(request, 'rental/addedit_carro.html', context)
 
     def post(self, request, pk, *args, **kwargs):
         carro = get_object_or_404(Carro, pk=pk)
@@ -42,7 +42,7 @@ class EditCarro(LoginRequiredMixin, View):
             carro.save()
             return redirect('listar_carros')
         context = {'form': form, 'addedit': 'Editar'}
-        return render(request, 'rental/carros/addedit_carro.html', context)
+        return render(request, 'rental/addedit_carro.html', context)
 
 
 class AtivaDesativaCarro(LoginRequiredMixin, View):
