@@ -1,17 +1,18 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic.base import View
 from rental.forms import AddEditCarroForm
 from rental.models import Carro
 
 
-class ListaCarros(View):
+class ListaCarros(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         carros = Carro.objects.all()
         context = {'carros': carros}
         return render(request, 'rental/carros/listar_carros.html', context)
 
 
-class AddCarro(View):
+class AddCarro(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         context = {'form': AddEditCarroForm, 'addedit': 'Adicionar'}
         return render(request, 'rental/carros/addedit_carro.html', context)
@@ -26,7 +27,7 @@ class AddCarro(View):
         return render(request, 'rental/carros/addedit_carro.html', context)
 
 
-class EditCarro(View):
+class EditCarro(LoginRequiredMixin, View):
     def get(self, request, pk, *args, **kwargs):
         carro = get_object_or_404(Carro, pk=pk)
         form = AddEditCarroForm(instance=carro)
@@ -44,7 +45,7 @@ class EditCarro(View):
         return render(request, 'rental/carros/addedit_carro.html', context)
 
 
-class AtivaDesativaCarro(View):
+class AtivaDesativaCarro(LoginRequiredMixin, View):
     def get(self, request, pk, *args, **kwargs):
         carro = get_object_or_404(Carro, pk=pk)
         carro.ativo = not carro.ativo
@@ -52,7 +53,7 @@ class AtivaDesativaCarro(View):
         return redirect('listar_carros')
         
 
-class DelCarro(View):
+class DelCarro(LoginRequiredMixin, View):
     def get(self, request, pk, *args, **kwargs):
         carro = get_object_or_404(Carro, pk=pk)
         carro.delete()
