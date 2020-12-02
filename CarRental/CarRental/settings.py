@@ -24,12 +24,15 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'hyl^tqh%^z0e&#3d7h5o_fw@))i1*ek4^-tf+al9m1ymdebcru'
+SECRET_KEY = os.getenv('SECRET_KEY', 'hyl^tqh%^z0e&#3d7h5o_fw@))i1*ek4^-tf+al9m1ymdebcru')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = ENVIRONMENT != 'production'
 
-ALLOWED_HOSTS = []
+if ENVIRONMENT == 'development':
+    ALLOWED_HOSTS = []
+else:
+    ALLOWED_HOSTS = ['https://car-rental-inf1407.herokuapp.com/']
 
 
 # Application definition
@@ -150,3 +153,12 @@ else:
     EMAIL_HOST_PASSWORD = os.environ['EMAIL_HOST_PASSWORD']
 
 AUTH_USER_MODEL = 'rental.User'
+
+if ENVIRONMENT == 'production':
+    # Heroku: Update database configuration from $DATABASE_URL.
+    import dj_database_url
+    db_from_env = dj_database_url.config(conn_max_age=500)
+    DATABASES['default'].update(db_from_env)
+
+    # The absolute path to the directory where collectstatic will collect static files for deployment.
+    STATIC_ROOT = BASE_DIR / 'staticfiles'
