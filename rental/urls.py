@@ -1,5 +1,5 @@
 from django.urls import path
-from rental.views import views_carros, views_solicitacoes, views_funcionarios
+from rental.views import views_carros, views_solicitacoes, views_funcionarios, views_alugueis
 
 urlpatterns = [
     path('carros/', views_carros.ListaCarros.as_view(), name="listar_carros"),
@@ -14,5 +14,8 @@ urlpatterns = [
     path('funcionarios/', views_funcionarios.ListaClientesFuncionarios.as_view(), name="gerencia_clientes_funcionarios"),
     path('funcionarios/contratar/<int:pk>/', views_funcionarios.AddNovoFuncionario.as_view(), name="contratar_funcionario"),
     path('funcionarios/demitir/<int:pk>/', views_funcionarios.RemoveFuncionario.as_view(), name="demitir_funcionario"),
-    #path('alugar/', views_aluguel.ListaAlugueis, name="listar_alugueis"),   
+    path('aluguel/', views_alugueis.ListaMeusAlugueis.as_view(), name="meus_alugueis"),
+    path('aluguel/gerenciar/', views_alugueis.ListaAlugueis.as_view(), name="listar_alugueis"),
+    path('aluguel/solicita/', views_alugueis.SolicitarAluguel.as_view(), name="solicita_aluguel"),
+    path('aluguel/cancela/', views_alugueis.CancelaAluguel.as_view(), name="cancela_aluguel")
 ]

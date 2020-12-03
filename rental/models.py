@@ -34,19 +34,19 @@ class Carro(models.Model):
 
 class Aluguel(models.Model):
     cliente = models.ForeignKey(User, on_delete=models.CASCADE)
-    funcionario = models.ForeignKey(Funcionario, blank=True, null=True, on_delete=models.CASCADE)
     carro = models.ForeignKey(Carro, on_delete=models.CASCADE)
     data_ini = models.DateTimeField()
     data_fim = models.DateTimeField()
-    # só é mudado após avaliação do funcionário
-    status = models.BooleanField(blank=True, null=True)
-    data_avaliacao = models.DateTimeField(blank=True, null=True)
-    # data de devolução considera que pode ser devolvido adiantado ou atrasado
-    data_devolucao = models.DateTimeField(blank=True, null=True)
     preco_aluguel = models.FloatField()
-    taxa_atraso = models.FloatField(blank=True, null=True)
     CONDICOES = ((0, 'Péssima'), (1, 'Ruim'), (2, 'OK'), (3, 'Boa'), (4, 'Semi-novo'), (5, 'Novo'))
     condicao_antes = models.IntegerField(choices=CONDICOES)
+    # só é mudado após avaliação do funcionário
+    funcionario = models.ForeignKey(Funcionario, blank=True, null=True, on_delete=models.CASCADE)
+    status = models.BooleanField(blank=True, null=True)
+    data_avaliacao = models.DateTimeField(blank=True, null=True)
+    # só é mudado após a devolução do carro
+    data_devolucao = models.DateTimeField(blank=True, null=True)
+    taxa_atraso = models.FloatField(blank=True, null=True)
     condicao_depois = models.IntegerField(choices=CONDICOES, blank=True, null=True)
 
 

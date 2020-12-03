@@ -26,3 +26,9 @@ class CriaSolicitacaoForm(forms.Form):
 class AddNovoFuncionarioForm(forms.Form):
     salario = forms.FloatField(label="Salário", widget=forms.NumberInput(attrs={'class': 'form-control'}))
     horas_semana = forms.IntegerField(label="Horas Contratadas por Semana", widget=forms.NumberInput(attrs={'class': 'form-control'}))
+
+
+class SolicitaAluguelForm(forms.Form):
+    carro = forms.IntegerField(widget=forms.HiddenInput())
+    data_ini = forms.DateTimeField()
+    data_fim = forms.DateTimeField()

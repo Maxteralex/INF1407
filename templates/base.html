@@ -43,6 +43,12 @@
 						<li>
 							<a class="nav-link" href="{% url 'gerencia_clientes_funcionarios' %}">Gerenciar Funcionários</a>
 						</li>
+						<li>
+							<a class="nav-link" href="{% url 'listar_alugueis' %}"> Gerenciar Alugueis </a>
+						</li>
+						<li>
+							<a class="nav-link" href="{% url 'meus_alugueis' %}"> Meus Alugueis </a>
+						</li>
 					{% endif %}
 				</ul>
 				{% if user.is_authenticated %}
