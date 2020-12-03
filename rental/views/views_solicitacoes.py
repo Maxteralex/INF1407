@@ -41,6 +41,7 @@ class MudaStatusSolicitacao(LoginRequiredMixin, View):
             if status == 'aceita':
                 solicitacao.status = True
                 solicitacao.cliente.credito += solicitacao.valor
+                solicitacao.cliente.save()
             else:
                 solicitacao.status = False
             solicitacao.funcionario = funcionario
