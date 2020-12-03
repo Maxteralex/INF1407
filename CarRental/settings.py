@@ -32,7 +32,7 @@ DEBUG = ENVIRONMENT != 'production'
 if ENVIRONMENT == 'development':
     ALLOWED_HOSTS = []
 else:
-    ALLOWED_HOSTS = ['https://car-rental-inf1407.herokuapp.com/']
+    ALLOWED_HOSTS = ['car-rental-inf1407.herokuapp.com/', 'localhost']
 
 
 # Application definition
