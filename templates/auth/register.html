@@ -1,10 +1,16 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}Registro{% endblock %}
 
+{% block head %}
+    <script type='text/javascript' src="{% static 'js/checkCPF.js' %}"></script>
+{% endblock %}
+
 {% block content %}
     <h1>Criação de Usuário</h1>
-    <p>Informe os seus dados abaixo para efetuar o registro. Todos os dados são obrigatórios.</p>
+    <p>Informe os seus dados abaixo para efetuar o registro. Todos os dados com * são obrigatórios.</p>
+    <div id='idErro'>&nbsp;</div>
     <hr class="my-4">
     <form method="POST">
         {% csrf_token %}

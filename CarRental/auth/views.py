@@ -45,6 +45,22 @@ class RegisterView(View):
         return render(request, 'auth/register.html', context)
 
 
+def checkCPF(request):
+    cpf = (request.GET).get('cpf', None)
+    message = "CPF válido!"
+    check = User.objects.filter(cpf=cpf).exists()
+    if check:
+        message = "CPF já existe."
+    #if 
+    response = {
+        'check': check,
+        'message': message,
+        'color': "#ff0000" if check else "#000000",
+    }
+    # envia a resposta ao browser
+    return JsonResponse(response)
+
+
 class UserLoginView(SuccessMessageMixin, views.LoginView):
     def post(self, request, *args, **kwargs):
         response = super().post(request)

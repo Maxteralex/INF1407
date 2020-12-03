@@ -63,6 +63,7 @@ urlpatterns = [
         form_class=CustomSetPasswordForm,
         template_name='auth/password_reset_confirm.html'
     ), name='password_reset_confirm'),
+    path('accounts/checkCPF/', auth_views.checkCPF, name="checkCPF"),
 ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
