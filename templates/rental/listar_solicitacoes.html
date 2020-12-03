@@ -65,7 +65,7 @@
                         <td> {{ solicitacao.data_solicitacao }} </td>
                         <td> {% if solicitacao.status == None %} Não Avaliado {% elif solicitacao.status == True %} Aceita {% else %} Rejeitada {% endif %} </td>
                         {% if not private %}
-                            <td> {% if solicitacao.status == None %} - {% else %} {{ solicitacao.funcionario }} {% endif %} </td>
+                            <td> {% if solicitacao.status == None %} - {% else %} {{ solicitacao.funcionario.usuario.first_name }} {{ solicitacao.funcionario.usuario.last_name }} {% endif %} </td>
                             <td> {% if solicitacao.status == None %} - {% else %} {{ solicitacao.data_avaliacao }} {% endif %} </td>
                             <td>
                                 {% if solicitacao.status == None %}

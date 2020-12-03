@@ -46,4 +46,4 @@ class MudaStatusSolicitacao(LoginRequiredMixin, View):
             solicitacao.funcionario = funcionario
             solicitacao.data_avaliacao = datetime.now()
             solicitacao.save()
-        return redirect('listar_solicitacoes')
+        return redirect('gerencia_solicitacoes')
